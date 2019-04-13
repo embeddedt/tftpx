@@ -263,7 +263,6 @@ void do_put(char *filename){
 	
 	printf("\nSend file end.\n");
 	
-do_put_error:
 	fclose(fp);
 	
 	return;

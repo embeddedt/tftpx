@@ -49,6 +49,7 @@ char *conf_document_root;
 // usecond
 #define PKT_TIME_INTERVAL 5*1000
 
+typedef uint16_t ushort;
 
 struct tftpx_packet{
 	ushort cmd;

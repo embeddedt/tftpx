@@ -127,7 +127,7 @@ void handle_list(int sock, struct tftpx_request *request){
 	struct tftpx_packet packet;
 	
 	if(strlen(r_path) + strlen(conf_document_root) > sizeof(fullpath) - 1){		
-		printf("Request path too long. %d\n", strlen(r_path) + strlen(conf_document_root));
+		printf("Request path too long. %lu\n", (unsigned long)(strlen(r_path) + strlen(conf_document_root)));
 		return;
 	}
 	
@@ -219,7 +219,7 @@ void handle_rrq(int sock, struct tftpx_request *request){
 	}
 
 	if(strlen(r_path) + strlen(conf_document_root) > sizeof(fullpath) - 1){		
-		printf("Request path too long. %d\n", strlen(r_path) + strlen(conf_document_root));
+		printf("Request path too long. %lu\n", (unsigned long)(strlen(r_path) + strlen(conf_document_root)));
 		return;
 	}
 	
@@ -286,7 +286,7 @@ void handle_wrq(int sock, struct tftpx_request *request){
 	}
 
 	if(strlen(r_path) + strlen(conf_document_root) > sizeof(fullpath) - 1){		
-		printf("Request path too long. %d\n", strlen(r_path) + strlen(conf_document_root));
+		printf("Request path too long. %lu\n", (unsigned long)(strlen(r_path) + strlen(conf_document_root)));
 		return;
 	}
 	
