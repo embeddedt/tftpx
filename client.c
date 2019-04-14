@@ -127,11 +127,11 @@ int main(int argc, char **argv){
 
 // Download a file from the server.
 void do_get(char *remote_file, char *local_file){
-	struct tftpx_packet snd_packet, rcv_packet;
+	static struct tftpx_packet snd_packet, rcv_packet;
 	int next_block = 1;
 	int recv_n;
 	int total_bytes = 0;
-	struct tftpx_packet ack;	
+	static struct tftpx_packet ack;	
 	struct sockaddr_in sender;
 		
 	int r_size = 0;
@@ -157,11 +157,14 @@ void do_get(char *remote_file, char *local_file){
 			r_size = recvfrom(sock, &rcv_packet, sizeof(struct tftpx_packet), MSG_DONTWAIT,
 					(struct sockaddr *)&sender,
 					&addr_len);
+
 			if(r_size > 0 && r_size < 4){
 				printf("Bad packet: r_size=%d\n", r_size);
 			}
 			if(r_size >= 4 && rcv_packet.cmd == htons(CMD_DATA) && rcv_packet.block == htons(block)){
+#if 0 /* DEBUG */
 				printf("DATA: block=%d, data_size=%d\n", ntohs(rcv_packet.block), r_size - 4);
+#endif
 				// Send ACK.
 				snd_packet.block = rcv_packet.block;
 				sendto(sock, &snd_packet, sizeof(struct tftpx_packet), 0, (struct sockaddr*)&sender, addr_len);
@@ -186,7 +189,7 @@ do_get_error:
 // Upload a file to the server.
 void do_put(char *filename){
 	struct sockaddr_in sender;
-	struct tftpx_packet rcv_packet, snd_packet;
+	static struct tftpx_packet rcv_packet, snd_packet;
 	int r_size = 0;
 	int time_wait_ack;
 	
@@ -230,7 +233,9 @@ void do_put(char *filename){
 		
 		for(rxmt = 0; rxmt < PKT_MAX_RXMT; rxmt ++){
 			sendto(sock, &snd_packet, s_size + 4, 0, (struct sockaddr*)&sender, addr_len);
+#if 0 /* DEBUG */
 			printf("Send %d\n", block);
+#endif
 			// Wait for ACK.
 			for(time_wait_ack = 0; time_wait_ack < PKT_RCV_TIMEOUT; time_wait_ack += 20000){
 				// Try receive(Nonblock receive).
