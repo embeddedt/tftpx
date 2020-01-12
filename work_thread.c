@@ -4,6 +4,8 @@
  * File: work_thread.c
  *********************************************/
 
+#define _BSD_SOURCE
+#include <unistd.h>
 #include "tftpx.h"
 #include "work_thread.h"
 
